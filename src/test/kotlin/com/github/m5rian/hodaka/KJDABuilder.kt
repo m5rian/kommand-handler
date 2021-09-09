@@ -1,4 +1,4 @@
-package com.github.m5rian.jdaSlashCommansHandler.testbuilder
+package com.github.m5rian.hodaka
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
