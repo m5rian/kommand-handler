@@ -4,6 +4,6 @@ import java.util.*
 
 class DoubleResolver : Resolver<Double> {
     override fun resolve(parameter: String): Optional<Double> {
-        return Optional.ofNullable(parameter.toDoubleOrNull())
+        return Optional.ofNullable(parameter.replace(",", ".") .toDoubleOrNull())
     }
 }
