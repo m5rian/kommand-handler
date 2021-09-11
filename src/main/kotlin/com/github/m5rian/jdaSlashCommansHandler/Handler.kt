@@ -1,5 +1,6 @@
 package com.github.m5rian.jdaSlashCommansHandler
 
+import com.github.m5rian.jdaSlashCommansHandler.resolvers.Resolvers
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -28,22 +29,19 @@ class Handler : ListenerAdapter() {
                 .filter { it.length <= messageWithoutPrefix.length }
                 .firstOrNull { it.equals(messageWithoutPrefix.substring(0, it.length), ignoreCase = true) } ?: return@forEach
 
-            /*
-            val commandArguments: String = messageWithoutPrefix.substring(executor.length)
-            val arguments: MutableList<String> = mutableListOf()
-            for (i in 1..command.method.valueParameters.size) {
-                if (i == command.method.valueParameters.size) {
-                    val argument = commandArguments.split("\\s+", limit = i)[i]
-                    arguments.add(argument)
-                } else {
-                    val argument = commandArguments.split("\\s+")[i]
-                    arguments.add(argument)
-                }
+            val commandArguments: String = messageWithoutPrefix.substring(executor.length + 1)
+            val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
+            args.removeAll { it.isBlank() }
+
+            val resolvedArgs: MutableList<Any?> = mutableListOf()
+            command.method.valueParameters.mapIndexed { index, parameter ->
+                if (index == 0) return@mapIndexed
+                println(index)
+                resolvedArgs.add(Resolvers.resolve(parameter, args[index - 1]))
             }
-             */
 
             val cog: Cog = this.cogs.first { command in it.commands }
-            command.method.call(cog, CommandContext(event, executor))
+            command.method.call(cog, CommandContext(event, executor), *resolvedArgs.toTypedArray())
         }
     }
 
