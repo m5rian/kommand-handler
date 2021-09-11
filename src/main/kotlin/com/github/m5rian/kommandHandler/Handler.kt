@@ -36,7 +36,6 @@ class Handler : ListenerAdapter() {
             val resolvedArgs: MutableList<Any?> = mutableListOf()
             command.method.valueParameters.mapIndexed { index, parameter ->
                 if (index == 0) return@mapIndexed
-                println(index)
                 resolvedArgs.add(Resolvers.resolve(parameter, args[index - 1]))
             }
 
