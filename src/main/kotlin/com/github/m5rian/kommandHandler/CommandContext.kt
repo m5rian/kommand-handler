@@ -1,4 +1,4 @@
-package com.github.m5rian.jdaSlashCommansHandler
+package com.github.m5rian.kommandHandler
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 

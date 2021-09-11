@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.5.10"
 }
 
-group = "com.github.m5rian.slashCommandsHandler"
+group = "com.github.m5rian.kommandHandler"
 version = "development"
 
 repositories {

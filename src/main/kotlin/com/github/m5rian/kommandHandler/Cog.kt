@@ -1,4 +1,4 @@
-package com.github.m5rian.jdaSlashCommansHandler
+package com.github.m5rian.kommandHandler
 
 abstract class Cog {
     internal val commands = mutableListOf<CommandImpl>()

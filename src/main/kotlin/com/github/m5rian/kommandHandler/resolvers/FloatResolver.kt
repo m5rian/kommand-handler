@@ -1,4 +1,4 @@
-package com.github.m5rian.jdaSlashCommansHandler.resolvers
+package com.github.m5rian.kommandHandler.resolvers
 
 import java.util.*
 

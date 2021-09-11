@@ -1,6 +1,6 @@
-package com.github.m5rian.jdaSlashCommansHandler
+package com.github.m5rian.kommandHandler
 
-import com.github.m5rian.jdaSlashCommansHandler.resolvers.Resolvers
+import com.github.m5rian.kommandHandler.resolvers.Resolvers
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
