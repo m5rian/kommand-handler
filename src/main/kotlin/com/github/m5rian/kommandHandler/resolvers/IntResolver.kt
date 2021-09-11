@@ -1,9 +1,9 @@
 package com.github.m5rian.kommandHandler.resolvers
 
-import java.util.*
+import com.github.m5rian.kommandHandler.CommandContext
 
 class IntResolver : Resolver<Int> {
-    override fun resolve(parameter: String): Optional<Int> {
-        return Optional.ofNullable(parameter.toIntOrNull())
+    override suspend fun resolve(ctx: CommandContext, parameter: String): Int? {
+        return parameter.toIntOrNull()
     }
 }

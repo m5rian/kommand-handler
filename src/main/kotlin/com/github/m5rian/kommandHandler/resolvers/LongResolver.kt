@@ -1,9 +1,9 @@
 package com.github.m5rian.kommandHandler.resolvers
 
-import java.util.*
+import com.github.m5rian.kommandHandler.CommandContext
 
 class LongResolver : Resolver<Long> {
-    override fun resolve(parameter: String): Optional<Long> {
-        return Optional.ofNullable(parameter.toLongOrNull())
+    override suspend fun resolve(ctx: CommandContext, parameter: String): Long? {
+        return parameter.toLongOrNull()
     }
 }

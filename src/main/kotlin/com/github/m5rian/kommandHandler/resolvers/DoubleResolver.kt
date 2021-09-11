@@ -1,9 +1,9 @@
 package com.github.m5rian.kommandHandler.resolvers
 
-import java.util.*
+import com.github.m5rian.kommandHandler.CommandContext
 
 class DoubleResolver : Resolver<Double> {
-    override fun resolve(parameter: String): Optional<Double> {
-        return Optional.ofNullable(parameter.replace(",", ".") .toDoubleOrNull())
+    override suspend fun resolve(ctx: CommandContext, parameter: String): Double? {
+        return parameter.replace(",", ".").toDoubleOrNull()
     }
 }

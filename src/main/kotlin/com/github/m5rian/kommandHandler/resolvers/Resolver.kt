@@ -1,7 +1,7 @@
 package com.github.m5rian.kommandHandler.resolvers
 
-import java.util.*
+import com.github.m5rian.kommandHandler.CommandContext
 
 interface Resolver<T> {
-    fun resolve(parameter: String): Optional<T>
+    suspend fun resolve(ctx: CommandContext, parameter: String): T?
 }

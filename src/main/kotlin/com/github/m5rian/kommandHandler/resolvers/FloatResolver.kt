@@ -1,9 +1,9 @@
 package com.github.m5rian.kommandHandler.resolvers
 
-import java.util.*
+import com.github.m5rian.kommandHandler.CommandContext
 
 class FloatResolver : Resolver<Float> {
-    override fun resolve(parameter: String): Optional<Float> {
-        return Optional.ofNullable(parameter.replace(",", ".").toFloatOrNull())
+    override suspend fun resolve(ctx: CommandContext, parameter: String): Float? {
+        return parameter.replace(",", ".").toFloatOrNull()
     }
 }
