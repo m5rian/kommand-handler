@@ -1,3 +1,3 @@
 
-rootProject.name = "JdaSlashCommandsHandler"
+rootProject.name = "Kommand handler"
 
