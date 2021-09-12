@@ -6,4 +6,8 @@ object DiscordRegex {
     val userMention = "<@!\\d*>".toRegex()
     val userName = ".{2,32}".toRegex()
     val userAsTag = ".{2,32}#\\d{4}".toRegex()
+
+    val roleMention = "<@&\\d*>".toRegex()
+
+    val textChannelMention = "<#\\d*>".toRegex()
 }
