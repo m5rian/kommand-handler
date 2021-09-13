@@ -32,7 +32,7 @@ class Handler : ListenerAdapter() {
 
             val ctx = CommandContext(event, executor)
 
-            val commandArguments: String = messageWithoutPrefix.substring(executor.length + 1)
+            val commandArguments: String = if (messageWithoutPrefix.length < executor.length + 1) messageWithoutPrefix else messageWithoutPrefix.substring(executor.length + 1)
             val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
             args.removeAll { it.isBlank() }
 
