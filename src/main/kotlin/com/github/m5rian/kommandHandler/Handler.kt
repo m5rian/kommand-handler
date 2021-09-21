@@ -17,10 +17,14 @@ class Handler : ListenerAdapter() {
     private val scope = CoroutineScope(ForkJoinPool().asCoroutineDispatcher())
     var commandPackage: String? = null
     var defaultPrefixes: MutableList<String> = mutableListOf()
-    var guildPrefixes: ((Guild) -> MutableList<String>)? = null
+    var guildPrefixes: (suspend (Guild) -> MutableList<String>)? = null
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val prefixes: MutableList<String> = guildPrefixes?.invoke(event.guild) ?: defaultPrefixes
+        scope.launch { handle(event) }
+    }
+
+    private suspend fun handle(event: GuildMessageReceivedEvent) {
+        val prefixes = guildPrefixes?.invoke(event.guild) ?: defaultPrefixes
         val prefix: String = prefixes.firstOrNull { event.message.contentRaw.startsWith(it) } ?: return
 
         this.cogs.flatMap { it.commands }.forEach { command ->
