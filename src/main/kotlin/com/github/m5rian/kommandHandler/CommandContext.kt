@@ -1,10 +1,7 @@
 package com.github.m5rian.kommandHandler
 
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
-import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import kotlin.reflect.KFunction
 
@@ -26,6 +23,7 @@ class CommandContext(
     val guild: Guild = event.guild
     val member: Member = _member
     val channel: TextChannel = event.channel
+    val message: Message = event.message
 
     val user: User = event.author
 }
