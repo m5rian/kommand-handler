@@ -1,6 +1,7 @@
 package com.github.m5rian.kommandHandler.resolvers
 
 import com.github.m5rian.kommandHandler.CommandContext
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
@@ -19,6 +20,7 @@ object Resolvers {
 
         map[User::class] = UserResolver()
         map[Role::class] = RoleResolver()
+        map[Member::class] = MemberResolver()
         map[TextChannel::class] = TextChannelResolver()
     }
 
