@@ -15,15 +15,26 @@ import kotlin.reflect.full.*
 class Handler : ListenerAdapter() {
     private val cogs: MutableList<Cog> = mutableListOf()
     private val scope = CoroutineScope(ForkJoinPool().asCoroutineDispatcher())
+
     var commandPackage: String? = null
     var defaultPrefixes: MutableList<String> = mutableListOf()
     var guildPrefixes: (suspend (Guild) -> MutableList<String>)? = null
+    var ignoreSystemMessages: Boolean = false
+    var ignoreBotMessages: Boolean = false
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         scope.launch { handle(event) }
     }
 
     private suspend fun handle(event: GuildMessageReceivedEvent) {
+        if (ignoreSystemMessages && (event.message.isWebhookMessage || event.author.isSystem)) return
+        if (ignoreBotMessages && event.author.isBot) return
+        if (event.member == null) {
+            // TODO Handle null members
+            throw Exception("The member is null... Sorry lol")
+        }
+        val member = event.member!!
+
         val prefixes = guildPrefixes?.invoke(event.guild) ?: defaultPrefixes
         val prefix: String = prefixes.firstOrNull { event.message.contentRaw.startsWith(it) } ?: return
 
@@ -34,7 +45,7 @@ class Handler : ListenerAdapter() {
                 .filter { it.length <= messageWithoutPrefix.length }
                 .firstOrNull { it.equals(messageWithoutPrefix.substring(0, it.length), ignoreCase = true) } ?: return@forEach
 
-            val ctx = CommandContext(event, executor)
+            val ctx = CommandContext(event, member, executor)
 
             val commandArguments: String = if (messageWithoutPrefix.length < executor.length + 1) messageWithoutPrefix else messageWithoutPrefix.substring(executor.length + 1)
             val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
