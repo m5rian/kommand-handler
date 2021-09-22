@@ -45,8 +45,6 @@ class Handler : ListenerAdapter() {
                 .filter { it.length <= messageWithoutPrefix.length }
                 .firstOrNull { it.equals(messageWithoutPrefix.substring(0, it.length), ignoreCase = true) } ?: return@forEach
 
-            val ctx = CommandContext(event, member, executor)
-
             val commandArguments: String = if (messageWithoutPrefix.length < executor.length + 1) messageWithoutPrefix else messageWithoutPrefix.substring(executor.length + 1)
             val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
             args.removeAll { it.isBlank() }
@@ -54,6 +52,8 @@ class Handler : ListenerAdapter() {
             val cog: Cog = this.cogs.first { command in it.commands }
             scope.launch {
                 try {
+                    val ctx = CommandContext(event, command.method, member, executor)
+
                     val resolvedArgs: MutableList<Any?> = mutableListOf()
                     command.method.valueParameters.mapIndexed { index, parameter ->
                         if (index == 0) return@mapIndexed

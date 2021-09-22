@@ -6,13 +6,25 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import kotlin.reflect.KFunction
 
 @Suppress("unused")
-class CommandContext(val event: GuildMessageReceivedEvent, val member: Member, val executor: String) {
+class CommandContext(
+    _event: GuildMessageReceivedEvent,
+    _method: KFunction<*>,
+    _member: Member,
+    _executor: String
+) {
+    @Suppress("MemberVisibilityCanBePrivate")
+    val event: GuildMessageReceivedEvent = _event
+    val executor: String = _executor
+    val method: KFunction<*> = _method
+
     val bot: JDA = event.jda
     val botMember: Member = event.guild.selfMember
 
     val guild: Guild = event.guild
+    val member: Member = _member
     val channel: TextChannel = event.channel
 
     val user: User = event.author
