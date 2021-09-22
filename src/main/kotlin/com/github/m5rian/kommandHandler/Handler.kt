@@ -52,7 +52,7 @@ class Handler : ListenerAdapter() {
             val cog: Cog = this.cogs.first { command in it.commands }
             scope.launch {
                 try {
-                    val ctx = CommandContext(event, command.method, member, executor)
+                    val ctx = CommandContext(event, command.method, command, executor, member)
 
                     val resolvedArgs: MutableList<Any?> = mutableListOf()
                     command.method.valueParameters.mapIndexed { index, parameter ->
