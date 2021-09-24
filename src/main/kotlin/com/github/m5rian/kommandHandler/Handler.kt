@@ -2,20 +2,18 @@ package com.github.m5rian.kommandHandler
 
 import com.github.m5rian.kommandHandler.resolvers.Resolvers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.reflections.Reflections
-import java.util.concurrent.ForkJoinPool
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.*
 
 class Handler : ListenerAdapter() {
     private val cogs: MutableList<Cog> = mutableListOf()
-    private val scope = CoroutineScope(ForkJoinPool().asCoroutineDispatcher())
 
+    lateinit var coroutineScope: CoroutineScope
     var commandPackage: String? = null
     var defaultPrefixes: MutableList<String> = mutableListOf()
     var guildPrefixes: (suspend (Guild) -> MutableList<String>)? = null
@@ -23,7 +21,7 @@ class Handler : ListenerAdapter() {
     var ignoreBotMessages: Boolean = false
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        scope.launch { handle(event) }
+        coroutineScope.launch { handle(event) }
     }
 
     private suspend fun handle(event: GuildMessageReceivedEvent) {
@@ -50,7 +48,7 @@ class Handler : ListenerAdapter() {
             args.removeAll { it.isBlank() }
 
             val cog: Cog = this.cogs.first { command in it.commands }
-            scope.launch {
+            coroutineScope.launch {
                 try {
                     val ctx = CommandContext(event, command.method, command, executor, member)
 
@@ -69,7 +67,9 @@ class Handler : ListenerAdapter() {
     }
 
     fun loadCogs() {
-        if (commandPackage == null) throw IllegalStateException("Command package is not set!")
+        if (this.commandPackage == null) throw IllegalStateException("Command package is not set!")
+        if (!this::coroutineScope.isInitialized) throw IllegalStateException("No coroutine scope is set!")
+
         Reflections(commandPackage).getSubTypesOf(Cog::class.java)
             .filter { !it.isInterface }
             .map { it.getDeclaredConstructor().newInstance() }
