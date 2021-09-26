@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.github.m5rian.kommandHandler
 
 import com.github.m5rian.kommandHandler.resolvers.Resolvers
@@ -43,7 +45,7 @@ class Handler : ListenerAdapter() {
                 .filter { it.length <= messageWithoutPrefix.length }
                 .firstOrNull { it.equals(messageWithoutPrefix.substring(0, it.length), ignoreCase = true) } ?: return@forEach
 
-            val commandArguments: String = if (messageWithoutPrefix.length < executor.length + 1) messageWithoutPrefix else messageWithoutPrefix.substring(executor.length + 1)
+            val commandArguments: String = if (messageWithoutPrefix.length == executor.length) "" else messageWithoutPrefix.substring(executor.length + 1)
             val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
             args.removeAll { it.isBlank() }
 
@@ -54,8 +56,8 @@ class Handler : ListenerAdapter() {
 
                     val resolvedArgs: MutableList<Any?> = mutableListOf()
                     command.method.valueParameters.mapIndexed { index, parameter ->
-                        if (index == 0) return@mapIndexed
-                        resolvedArgs.add(Resolvers.resolve(ctx, parameter, args[index - 1]))
+                        if (index == 0) return@mapIndexed // Skip CommandContext parameter
+                        resolvedArgs.add(Resolvers.resolve(ctx, parameter, args.getOrNull(index - 1)))
                     }
 
                     command.method.callSuspend(cog, ctx, *resolvedArgs.toTypedArray())

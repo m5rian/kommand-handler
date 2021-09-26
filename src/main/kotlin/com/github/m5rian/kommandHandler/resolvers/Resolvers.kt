@@ -24,8 +24,9 @@ object Resolvers {
         map[TextChannel::class] = TextChannelResolver()
     }
 
-    suspend fun resolve(ctx: CommandContext, parameter: KParameter, argument: String): Any? {
-        val resolver = map[parameter.type.classifier] ?: throw Exception("The type ${parameter.type.classifier} hasn't a registered resolver")
+    suspend fun resolve(ctx: CommandContext, parameter: KParameter, argument: String?): Any {
+        val clazz= parameter.type.arguments.first().type?.classifier
+        val resolver = map[clazz] ?: throw Exception("The type ${parameter::class.java.genericSuperclass.typeName} hasn't a registered resolver")
         return resolver.resolve(ctx, argument)
     }
 }
