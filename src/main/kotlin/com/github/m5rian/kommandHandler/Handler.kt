@@ -57,7 +57,7 @@ class Handler : ListenerAdapter() {
                     val resolvedArgs: MutableList<Any?> = mutableListOf()
                     command.method.valueParameters.mapIndexed { index, parameter ->
                         if (index == 0) return@mapIndexed // Skip CommandContext parameter
-                        resolvedArgs.add(Resolvers.resolve(ctx, parameter, args.getOrNull(index - 1)))
+                        resolvedArgs.add(Resolvers.resolve(ctx, parameter, args.getOrNull(index), args))
                     }
 
                     command.method.callSuspend(cog, ctx, *resolvedArgs.toTypedArray())
