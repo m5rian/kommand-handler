@@ -17,6 +17,7 @@ class CommandContext internal constructor(
     val event: GuildMessageReceivedEvent = _event
     val name: String = _command.name
     val aliases: Array<String> = _command.aliases
+    val description: String = _command.description
     val executor: String = _executor
     val method: KFunction<*> = _method
 

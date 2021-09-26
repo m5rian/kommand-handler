@@ -90,7 +90,7 @@ class Handler : ListenerAdapter() {
     private fun loadCommand(method: KFunction<*>): CommandImpl? {
         if (method.valueParameters.firstOrNull()?.type?.classifier != CommandContext::class) return null
         val commandInfo = method.findAnnotation<Command>() ?: return null
-        return CommandImpl(commandInfo.name, commandInfo.aliases, method)
+        return CommandImpl(commandInfo.name, commandInfo.aliases, commandInfo.description, method)
     }
 }
 
