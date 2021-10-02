@@ -2,6 +2,7 @@
 
 package com.github.m5rian.kommandHandler
 
+import com.github.m5rian.kommandHandler.commandInfo.Command
 import com.github.m5rian.kommandHandler.resolvers.Resolvers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
