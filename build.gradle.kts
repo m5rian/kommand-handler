@@ -7,7 +7,7 @@ plugins {
 
 group = "com.github.m5rian"
 val id = "Kommand-handler"
-version = "development_test"
+version = "development"
 
 repositories {
     mavenCentral()
