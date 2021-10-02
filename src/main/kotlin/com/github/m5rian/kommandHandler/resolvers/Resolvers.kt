@@ -2,6 +2,7 @@ package com.github.m5rian.kommandHandler.resolvers
 
 import com.github.m5rian.kommandHandler.CommandContext
 import com.github.m5rian.kommandHandler.MultiWord
+import com.github.m5rian.kommandHandler.resolvers.impl.*
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.TextChannel

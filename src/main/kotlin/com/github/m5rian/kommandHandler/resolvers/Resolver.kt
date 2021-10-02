@@ -4,7 +4,7 @@ import com.github.m5rian.kommandHandler.CommandContext
 
 interface Resolver<T> {
     suspend fun resolve(ctx: CommandContext, parameter: String?): Arg<T> {
-        return if (parameter == null) Arg.ofNotGiven()
+        return if (parameter == null) Arg.ofNotGiven(ctx)
         else resolveIfNotNull(ctx, parameter)
     }
 
