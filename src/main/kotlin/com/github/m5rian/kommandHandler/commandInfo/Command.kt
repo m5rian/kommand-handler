@@ -6,5 +6,5 @@ annotation class Command(
     val name: String,
     val aliases: Array<String> = [],
     val description: String = "",
-    vararg val args: Data
+    val args: Array<Data>
 )

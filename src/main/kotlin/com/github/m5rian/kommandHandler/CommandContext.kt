@@ -1,5 +1,6 @@
 package com.github.m5rian.kommandHandler
 
+import com.github.m5rian.kommandHandler.commandInfo.Data
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
@@ -17,6 +18,7 @@ class CommandContext internal constructor(
     val event: GuildMessageReceivedEvent = _event
     val name: String = _command.name
     val aliases: Array<String> = _command.aliases
+    var args: Array<Data> = _command.args
     val description: String = _command.description
     val executor: String = _executor
     val method: KFunction<*> = _method
