@@ -75,8 +75,9 @@ class Handler : ListenerAdapter() {
 
         Reflections(commandPackage).getSubTypesOf(Cog::class.java)
             .filter { !it.isInterface }
-            .map { it.getDeclaredConstructor().newInstance() }
+            .map { it.kotlin.objectInstance}
             .forEach { cog ->
+                if (cog == null) throw IllegalStateException("Make sure all command listeners are objects!")
                 this.cogs.add(cog)
                 loadCommands(cog)
             }
