@@ -14,13 +14,13 @@ repositories {
     maven(url = "https://m2.dv8tion.net/releases")
 }
 dependencies {
-    api("net.dv8tion:JDA:4.3.0_315")
-    implementation(kotlin("reflect"))
-    implementation("org.reflections:reflections:0.9.11")
+    compileOnly(group = "net.dv8tion", name = "JDA", version = "4.3.0_315")
+    compileOnly(kotlin("reflect"))
+    compileOnly(group = "org.reflections", name = "reflections", version = "0.10")
     val kotlinxGroup = "org.jetbrains.kotlinx"
     val kotlinxVersion = "1.5.2"
-    implementation("$kotlinxGroup:kotlinx-coroutines-core:$kotlinxVersion")
-    implementation("$kotlinxGroup:kotlinx-coroutines-jdk8:$kotlinxVersion")
+    compileOnly(group = kotlinxGroup, name = "kotlinx-coroutines-core")
+    compileOnly("$kotlinxGroup:kotlinx-coroutines-jdk8:$kotlinxVersion")
 }
 
 /* publishing */
