@@ -27,11 +27,12 @@ object Resolvers {
         map[TextChannel::class] = TextChannelResolver()
     }
 
-    suspend fun resolve(ctx: CommandContext, parameter: KParameter, argument: String?, arguments: MutableList<String>): Any {
+    suspend fun resolve(ctx: CommandContext, parameter: KParameter, arg: String?, args: String?): Arg<*> {
         val clazz = parameter.type.arguments.first().type?.classifier
         val resolver = map[clazz] ?: throw Exception("The type ${parameter::class.java.genericSuperclass.typeName} hasn't a registered resolver")
-        return if (resolver::class == MultiWordResolver::class) resolver.resolve(ctx, arguments.joinToString(" "))
-        else resolver.resolve(ctx, argument)
+
+        return if (resolver::class == MultiWordResolver::class) resolver.resolve(ctx, args)
+        else resolver.resolve(ctx, arg)
     }
 
 }

@@ -3,6 +3,7 @@
 package com.github.m5rian.kommandHandler
 
 import com.github.m5rian.kommandHandler.commandInfo.Command
+import com.github.m5rian.kommandHandler.resolvers.Arg
 import com.github.m5rian.kommandHandler.resolvers.Resolvers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,8 +47,8 @@ class Handler : ListenerAdapter() {
                 .filter { it.length <= messageWithoutPrefix.length }
                 .firstOrNull { it.equals(messageWithoutPrefix.substring(0, it.length), ignoreCase = true) } ?: return@forEach
 
-            val commandArguments: String = if (messageWithoutPrefix.length == executor.length) "" else messageWithoutPrefix.substring(executor.length + 1)
-            val args: MutableList<String> = commandArguments.split("\\s+".toRegex()).toMutableList()
+            val commandArguments: String? = if (messageWithoutPrefix.length == executor.length) null else messageWithoutPrefix.substring(executor.length + 1)
+            val args: MutableList<String> = commandArguments?.split("\\s+".toRegex())?.toMutableList() ?: mutableListOf()
             args.removeAll { it.isBlank() }
 
             val cog: Cog = this.cogs.first { command in it.commands }
@@ -55,11 +56,11 @@ class Handler : ListenerAdapter() {
                 try {
                     val ctx = CommandContext(event, command.method, command, executor, member)
 
-                    val resolvedArgs: MutableList<Any?> = mutableListOf()
-                    command.method.valueParameters.mapIndexed { index, parameter ->
-                        if (index == 0) return@mapIndexed // Skip CommandContext parameter
-                        resolvedArgs.add(Resolvers.resolve(ctx, parameter, args.getOrNull(index - 1), args))
-                    }
+                    val resolvedArgs: List<Arg<*>> = command.method.valueParameters
+                        .subList(1, command.method.valueParameters.size) // Don't resolve CommandContext parameter
+                        .mapIndexed { index, parameter ->
+                            Resolvers.resolve(ctx, parameter, args.getOrNull(index), commandArguments)
+                        }
 
                     command.method.callSuspend(cog, ctx, *resolvedArgs.toTypedArray())
                 } catch (e: Throwable) {
@@ -75,7 +76,7 @@ class Handler : ListenerAdapter() {
 
         Reflections(commandPackage).getSubTypesOf(Cog::class.java)
             .filter { !it.isInterface }
-            .map { it.kotlin.objectInstance}
+            .map { it.kotlin.objectInstance }
             .forEach { cog ->
                 if (cog == null) throw IllegalStateException("Make sure all command listeners are objects!")
                 this.cogs.add(cog)
